@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  front:
+      build:
+        context: .
+        dockerfile: Dockerfile.front
+      ports:
+        - 5000:5000
+      container_name: ex_2.3_front
+
+  back:
+      build:
+        context: .
+        dockerfile: Dockerfile.back
+      ports:
+        - 8080:8080
+      container_name: ex_2.3_back

@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  front:
+      build:
+        context: .
+        dockerfile: Dockerfile.front
+      ports:
+        - 5000:5000
+      container_name: ex_2.3_front
+
+  back:
+      build:
+        context: .
+        dockerfile: Dockerfile.back
+      ports:
+        - 8080:8080
+      environment:
+        REDIS_HOST: redis_host
+      container_name: ex_2.3_back
+
+  redis_host:
+      image: redis
+      restart: unless-stopped
+      command: redis-server
+      container_name: redis_host

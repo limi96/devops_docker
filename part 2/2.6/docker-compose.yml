@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  front:
+      build:
+        context: .
+        dockerfile: Dockerfile.front
+      ports:
+        - 5000:5000
+      container_name: ex_2.3_front
+
+  back:
+      build:
+        context: .
+        dockerfile: Dockerfile.back
+      ports:
+        - 8080:8080
+      environment:
+        REDIS_HOST: redis_host
+        # POSTGRES_HOST: db_postgres
+        # POSTGRES_HOST: db
+        # POSTGRES_USER: postgres
+        POSTGRES_HOST: postgres
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DATABASE: db_postgres
+      container_name: ex_2.3_back
+
+  redis_host:
+      image: redis
+      restart: unless-stopped
+      command: redis-server
+      container_name: redis_host
+
+  db:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: postgres
+      # POSTGRES_HOST: postgres
+      # POSTGRES_USER: postgres
+      # POSTGRES_DATABASE: postgres
+    container_name: db_postgres
+    #container_name: db_postgres
