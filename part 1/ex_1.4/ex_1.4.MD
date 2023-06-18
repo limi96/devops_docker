@@ -1,0 +1,15 @@
+# CLI input used
+
+```
+docker run -d -it --name missing ubuntu sh -c 'while true; do echo "Input website:"; read website; echo "Searching.."; sleep 1; curl http://$website; done'
+
+docker exec -it missing bash
+
+apt-get update
+
+apt-get -y install curl
+
+docker attach missing
+
+helsinki.fi
+```

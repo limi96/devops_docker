@@ -1,0 +1,22 @@
+FROM golang:1.16-alpine as build-stage
+
+WORKDIR /usr/src/app
+RUN apk add git && git clone https://github.com/docker-hy/material-applications
+COPY . .
+
+WORKDIR material-applications/example-backend
+
+RUN addgroup -S appuser && adduser -S appuser && \
+ chown appuser /usr/src/app/material-applications/example-backend \
+  && go build -o /built-server
+
+FROM scratch
+
+COPY --from=build-stage /built-server /built-server
+EXPOSE 8080
+ENV REQUEST_ORIGIN=http://127.0.0.1:5000
+
+USER appuser
+CMD ["./server"]
+
+

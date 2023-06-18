@@ -1,0 +1,16 @@
+FROM node:16
+
+EXPOSE 5000
+ENV REACT_APP_BACKEND_URL=http://127.0.0.1:8080
+WORKDIR /usr/src/app
+
+COPY . .
+RUN git clone https://github.com/docker-hy/material-applications
+
+WORKDIR material-applications/example-frontend/
+COPY . .
+
+RUN npm install && npm run build && npm install -g serve && useradd -m appuser && chown appuser .
+
+USER appuser
+CMD ["serve", "-s", "-l", "5000", "build"]

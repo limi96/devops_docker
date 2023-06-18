@@ -1,0 +1,19 @@
+FROM node:16-alpine as build-stage
+
+WORKDIR /usr/src/app
+RUN apk add git && git clone https://github.com/docker-hy/material-applications
+WORKDIR material-applications/example-frontend/
+RUN npm install && npm run build
+
+FROM node:16-alpine as start-server
+
+ENV REACT_APP_BACKEND_URL=http://127.0.0.1:8080
+
+RUN npm install -g serve && addgroup -S appuser \
+        && adduser -S appuser && chown appuser .
+
+COPY --from=build-stage /usr/src/app/build /usr/src/app/build
+
+EXPOSE 5000
+USER appuser
+CMD ["serve", "-s", "-l", "5000", "build"]
